@@ -12,7 +12,7 @@ from playwright.async_api import async_playwright, Playwright
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-load_dotenv()
+load_dotenv(".env")
 
 # Load plugin credentials from environment
 USER_ID = os.getenv("USERALE_USER_ID")
@@ -60,19 +60,27 @@ def build_config(
 
     return json.dumps(config)
 
+
 async def anomalous_bot(page):
 
     # Navigate to pytorch/pytorch/torch/cuda/__init__.py using first CSS selector matches
-    await page.locator('a[title="torch"][aria-label="torch, (Directory)"]').nth(1).click()
+    await page.locator('a[title="torch"][aria-label="torch, (Directory)"]').nth(
+        1
+    ).click()
     await page.locator('a[title="cuda"][aria-label="cuda, (Directory)"]').nth(1).click()
-    await page.locator('a[title="__init__.py"][aria-label="__init__.py, (File)"]').nth(1).click()
-            
+    await page.locator('a[title="__init__.py"][aria-label="__init__.py, (File)"]').nth(
+        1
+    ).click()
+
     # Collapse and open is_bf16_supported() method
-    await page.locator('svg.Octicon-sc-9kayk9-0').nth(1).click() 
-    await page.locator('svg.Octicon-sc-9kayk9-0').nth(1).click() 
-            
+    await page.locator("svg.Octicon-sc-9kayk9-0").nth(1).click()
+    await page.locator("svg.Octicon-sc-9kayk9-0").nth(1).click()
+
     # Navigate back to pytorch/pytorch
-    await page.locator('a[data-pjax="#repo-content-pjax-container"][data-turbo-frame="repo-content-turbo-frame"][href="/pytorch/pytorch"]').nth(1).click() 
+    await page.locator(
+        'a[data-pjax="#repo-content-pjax-container"][data-turbo-frame="repo-content-turbo-frame"][href="/pytorch/pytorch"]'
+    ).nth(1).click()
+
 
 async def normal_bot(page):
 
@@ -80,28 +88,35 @@ async def normal_bot(page):
     # Navigate to pytorch/pytorch/torch/cuda/__init__.py using first CSS selector matches
     await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 15)")
     await asyncio.sleep(2)
-    await page.locator('a[title="torch"][aria-label="torch, (Directory)"]').nth(1).click()
+    await page.locator('a[title="torch"][aria-label="torch, (Directory)"]').nth(
+        1
+    ).click()
     await asyncio.sleep(2)
     await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 3)")
     await asyncio.sleep(2)
     await page.locator('a[title="cuda"][aria-label="cuda, (Directory)"]').nth(1).click()
     await asyncio.sleep(2)
-    await page.locator('a[title="__init__.py"][aria-label="__init__.py, (File)"]').nth(1).click()
+    await page.locator('a[title="__init__.py"][aria-label="__init__.py, (File)"]').nth(
+        1
+    ).click()
     await asyncio.sleep(2)
 
     # Collapse and open is_bf16_supported() method
-    await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 12)") 
+    await page.evaluate("window.scrollTo(0, document.body.scrollHeight / 12)")
     await asyncio.sleep(2)
-    await page.locator('svg.Octicon-sc-9kayk9-0').nth(1).click() 
+    await page.locator("svg.Octicon-sc-9kayk9-0").nth(1).click()
     await asyncio.sleep(2)
-    await page.locator('svg.Octicon-sc-9kayk9-0').nth(1).click() 
+    await page.locator("svg.Octicon-sc-9kayk9-0").nth(1).click()
     await asyncio.sleep(2)
     await page.evaluate("window.scrollTo(0, 0)")
     await asyncio.sleep(2)
-            
+
     # Navigate back to pytorch/pytorch
-    await page.locator('a[data-pjax="#repo-content-pjax-container"][data-turbo-frame="repo-content-turbo-frame"][href="/pytorch/pytorch"]').nth(1).click() 
+    await page.locator(
+        'a[data-pjax="#repo-content-pjax-container"][data-turbo-frame="repo-content-turbo-frame"][href="/pytorch/pytorch"]'
+    ).nth(1).click()
     await asyncio.sleep(2)
+
 
 async def run(p: Playwright, type="normal"):
     context = await p.chromium.launch_persistent_context(
@@ -124,8 +139,9 @@ async def run(p: Playwright, type="normal"):
         password=PASSWORD,
         url_whitelist="github.com",
     )
-    await background_page.evaluate(
+    config = await background_page.evaluate(
         f"""
+        browser.storage.local.set({config_string});
         window.updateConfig({config_string});
         window.config;
         """
@@ -142,22 +158,12 @@ async def run(p: Playwright, type="normal"):
 
     # Navigate to a page
     logger.info("Navigating to test page")
-    await page.goto('https://github.com/pytorch/pytorch')
+    await page.goto("https://github.com/pytorch/pytorch")
     if type == "anomalous":
         await anomalous_bot(page)  # Add 'await' here
     else:
         await normal_bot(page)  # Ensure 'await' is used here too
 
-    # Old version Evan made
-    # await page.wait_for_timeout(TIMEOUT_MS)
-
-    # # Click my user icon
-    # element = await page.query_selector('a[href="/pricing"]')
-    # await element.click()
-    # await page.wait_for_timeout(TIMEOUT_MS)
-
-    # # Sleep for a bit to allow the plugin to capture the events
-    # await page.wait_for_timeout(CLOSEOUT_MS)
     await context.close()
 
 
