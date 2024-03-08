@@ -144,26 +144,14 @@ async def run(p: Playwright, type="normal"):
     logger.info("Navigating to test page")
     await page.goto('https://github.com/pytorch/pytorch')
     if type == "anomalous":
-        await anomalous_bot(page)  # Add 'await' here
-    else:
-        await normal_bot(page)  # Ensure 'await' is used here too
-
-    # Old version Evan made
-    # await page.wait_for_timeout(TIMEOUT_MS)
-
-    # # Click my user icon
-    # element = await page.query_selector('a[href="/pricing"]')
-    # await element.click()
-    # await page.wait_for_timeout(TIMEOUT_MS)
-
-    # # Sleep for a bit to allow the plugin to capture the events
-    # await page.wait_for_timeout(CLOSEOUT_MS)
+        await anomalous_bot(page) 
+    elif type == "normal":
+        await normal_bot(page) 
     await context.close()
-
 
 async def main():
     async with async_playwright() as p:
-        await run(p, "anomalous")
-
+        await run(p, "normal")
+        # await run(p, "anomalous")
 
 asyncio.run(main())
