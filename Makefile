@@ -1,7 +1,7 @@
-.PHONY: venv install-deps run
+.PHONY: venv install-deps run test list-workflows
 
 # Define the name of your virtual environment
-VENV_NAME := venv
+VENV_NAME := .venv
 
 # Define the path to the Python interpreter inside the virtual environment
 VENV_PYTHON := $(VENV_NAME)/bin/python
@@ -30,4 +30,12 @@ install-browsers:
 
 # Target to run the Playwright script
 run: install-deps install-browsers
-	$(ACTIVATE_VENV) && $(VENV_PYTHON) test-userale-plugin.py
+	$(ACTIVATE_VENV) && $(VENV_PYTHON) main.py $(workflow_type) $(mode)
+
+# Target to run tests using pytest
+test: install-deps
+	$(ACTIVATE_VENV) && $(VENV_PYTHON) -m pytest
+
+# Target to list available workflows
+list-workflows: install-deps
+	$(ACTIVATE_VENV) && $(VENV_PYTHON) -c "from src.workflows.utils import list_workflows; list_workflows()"
