@@ -62,8 +62,21 @@ async def create_plugin_context(playwright: Playwright, **kwargs) -> BrowserCont
     Returns:
         BrowserContext -- the playwright browser context with the plugin installed
     """
+    # Fetch config values
+    url = kwargs.pop("url", cfg.url)
+    user_id = kwargs.pop("user_id", cfg.user_id)
+    password = kwargs.pop("password", cfg.password)
+    user_data_dir = (
+        kwargs.pop("user_data_dir", cfg.user_data_dir)
+        or f"/tmp/flagon-demo-bot-{user_id}"
+    )
+
+    # Validate config values
+    if any([url is None, user_id is None, password is None]):
+        raise ValueError("Missing required configuration values")
+
     context = await playwright.chromium.launch_persistent_context(
-        cfg.user_data_dir,
+        user_data_dir,
         headless=False,
         args=[
             f"--disable-extensions-except={cfg.path_to_extension}",
@@ -76,9 +89,7 @@ async def create_plugin_context(playwright: Playwright, **kwargs) -> BrowserCont
     else:
         background_page = context.background_pages[0]
 
-    config_string = build_config(
-        url=cfg.url, user_id=cfg.user_id, password=cfg.password, **kwargs
-    )
+    config_string = build_config(url=url, user_id=user_id, password=password, **kwargs)
     await background_page.evaluate(
         f"""
         browser.storage.local.set({config_string});

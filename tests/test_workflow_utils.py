@@ -7,7 +7,7 @@ class TestGetWorkflow:
         "workflow_type, expected_class_name",
         [
             ("github-anomalous", "GithubAnomalousWorkflow"),
-            ("github-plugin", "GithubNormalWorkflow"),
+            ("github-normal", "GithubNormalWorkflow"),
             # Add more workflow types and their expected class names as needed
         ],
     )

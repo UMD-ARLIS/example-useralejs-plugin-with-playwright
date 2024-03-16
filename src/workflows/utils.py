@@ -15,7 +15,7 @@ workflow_classes: Dict[WorkflowType, Tuple[str, str]] = {
         "GithubAnomalousWorkflow",
         "Workflow in PyTorch GitHub repo with intentionally anomalous behavior.",
     ),
-    "github-plugin": (
+    "github-normal": (
         "GithubNormalWorkflow",
         "Workflow in PyTorch GitHub repo with normal behavior.",
     ),
