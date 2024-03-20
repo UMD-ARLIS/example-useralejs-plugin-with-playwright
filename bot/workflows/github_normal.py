@@ -1,6 +1,6 @@
 import asyncio
 
-from src.lib.workflow import Workflow
+from bot.lib.workflow import Workflow
 
 
 class GithubNormalWorkflow(Workflow):

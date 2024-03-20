@@ -1,6 +1,6 @@
 import pytest
-from src.lib.utils import run_or_loop
-from src.lib.workflow import Workflow
+from bot.lib.utils import run_or_loop
+from bot.lib.workflow import Workflow
 
 
 class TestRunOrLoop:

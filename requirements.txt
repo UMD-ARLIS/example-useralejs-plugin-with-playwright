@@ -1,9 +1,0 @@
-asyncio
-colorama
-python-dotenv
-playwright==1.18.1
-pydantic
-pydantic-settings
-pytest
-pytest-asyncio
-pytest-mock

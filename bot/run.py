@@ -1,9 +1,9 @@
 import logging
 from playwright.async_api import Playwright
-from src.lib.plugin import create_plugin_context
-from src.lib.utils import create_default_context, run_or_loop
-from src.lib.workflow import Workflow
-from src.types import RunMode
+from bot.lib.plugin import create_plugin_context
+from bot.lib.utils import create_default_context, run_or_loop
+from bot.lib.workflow import Workflow
+from bot.types import RunMode
 
 
 async def run(

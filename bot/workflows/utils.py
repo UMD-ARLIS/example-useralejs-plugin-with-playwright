@@ -5,8 +5,8 @@ from importlib import import_module
 from typing import Dict, Tuple
 
 
-from src.lib.workflow import Workflow
-from src.types import WorkflowType
+from bot.lib.workflow import Workflow
+from bot.types import WorkflowType
 
 colorama.init(autoreset=True)
 
@@ -25,7 +25,7 @@ workflow_classes: Dict[WorkflowType, Tuple[str, str]] = {
 
 def import_workflow(workflow_type: WorkflowType) -> Workflow:
     """Return the workflow class for the specified workflow type."""
-    workflow_module = import_module("src.workflows")
+    workflow_module = import_module("bot.workflows")
     workflow_class_name, _ = workflow_classes[workflow_type]
     workflow_class = getattr(workflow_module, workflow_class_name)
     return workflow_class

@@ -1,5 +1,5 @@
 import pytest
-from src.workflows.utils import import_workflow
+from bot.workflows.utils import import_workflow
 
 
 class TestGetWorkflow:

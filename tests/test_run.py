@@ -2,8 +2,8 @@ import logging
 from playwright.async_api import Playwright
 import pytest
 
-from src.lib.workflow import Workflow
-from src.run import run
+from bot.lib.workflow import Workflow
+from bot.run import run
 
 
 class TestRun:
@@ -27,15 +27,15 @@ class TestRun:
         # Patch async functions
         context_mock = mocker.patch(
             (
-                "src.run.create_plugin_context"
+                "bot.run.create_plugin_context"
                 if use_plugin
-                else "src.run.create_default_context"
+                else "bot.run.create_default_context"
             ),
             return_value=mocker.AsyncMock(),
         )
 
         run_or_loop_mock = mocker.patch(
-            "src.run.run_or_loop", return_value=mocker.AsyncMock()
+            "bot.run.run_or_loop", return_value=mocker.AsyncMock()
         )
 
         # Set up expectations for mock objects

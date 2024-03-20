@@ -1,7 +1,7 @@
 import base64
 import json
 import pytest
-from src.lib.plugin import build_config
+from bot.lib.plugin import build_config
 
 
 @pytest.mark.parametrize(

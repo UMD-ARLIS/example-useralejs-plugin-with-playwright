@@ -4,10 +4,10 @@ import json
 import logging
 
 from playwright.async_api import async_playwright
-from src.run import run
+from bot.run import run
 
 
-from src.workflows.utils import import_workflow
+from bot.workflows.utils import import_workflow
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
