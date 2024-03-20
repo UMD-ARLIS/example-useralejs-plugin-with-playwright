@@ -20,12 +20,20 @@ class TestRun:
         return mocker.MagicMock(spec=logging.Logger)
 
     @pytest.mark.asyncio
-    async def test_run_function(self, mocker, p_mock, workflow_mock, logger_mock):
+    @pytest.mark.parametrize("use_plugin", [True, False])
+    async def test_run_function(
+        self, mocker, p_mock, workflow_mock, logger_mock, use_plugin
+    ):
         # Patch async functions
-        create_plugin_context_mock = mocker.patch(
-            "src.run.create_plugin_context",
+        context_mock = mocker.patch(
+            (
+                "src.run.create_plugin_context"
+                if use_plugin
+                else "src.run.create_default_context"
+            ),
             return_value=mocker.AsyncMock(),
         )
+
         run_or_loop_mock = mocker.patch(
             "src.run.run_or_loop", return_value=mocker.AsyncMock()
         )
@@ -35,10 +43,17 @@ class TestRun:
         expected_kwargs = {"key": "value"}
 
         # Run the function with mocked dependencies
-        await run(p_mock, workflow_mock, expected_mode, logger_mock, **expected_kwargs)
+        await run(
+            p=p_mock,
+            workflow=workflow_mock,
+            mode=expected_mode,
+            use_plugin=use_plugin,
+            logger=logger_mock,
+            **expected_kwargs
+        )
 
         # Assert that other calls we do not want to test were not called
+        context_mock.assert_called_once()
         workflow_mock.assert_called_once()
-        create_plugin_context_mock.assert_called_once()
         run_or_loop_mock.assert_called_once()
         assert logger_mock.info.call_count == 2

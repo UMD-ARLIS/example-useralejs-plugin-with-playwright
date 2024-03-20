@@ -1,17 +1,24 @@
 import logging
-from typing import Optional
 from playwright.async_api import Playwright
 from src.lib.plugin import create_plugin_context
-from src.lib.utils import run_or_loop
+from src.lib.utils import create_default_context, run_or_loop
 from src.lib.workflow import Workflow
 from src.types import RunMode
 
 
 async def run(
-    p: Playwright, workflow: Workflow, mode: RunMode, logger: logging.Logger, **kwargs
+    p: Playwright,
+    workflow: Workflow,
+    mode: RunMode,
+    use_plugin: bool,
+    logger: logging.Logger,
+    **kwargs,
 ):
     # Build playwright BrowserContext with UserALE plugin
-    context = await create_plugin_context(playwright=p, **kwargs)
+    if use_plugin:
+        context = await create_plugin_context(playwright=p, **kwargs)
+    else:
+        context = await create_default_context(playwright=p, **kwargs)
 
     # Create a new page in the browser context
     logger.info("Starting playwright")

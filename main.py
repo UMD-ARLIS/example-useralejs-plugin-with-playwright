@@ -1,3 +1,4 @@
+from argparse import Namespace
 import asyncio
 import json
 import logging
@@ -12,10 +13,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def parse_args():
+def parse_args(input_args=None) -> Namespace:
     import argparse
 
-    def parse_dict(s):
+    def parse_dict(s: str) -> dict:
         try:
             return json.loads(s)
         except json.JSONDecodeError as e:
@@ -43,13 +44,21 @@ def parse_args():
         required=False,
     )
     parser.add_argument(
+        "--use_plugin",
+        action="store_true",
+        help="Whether to use the UserALE browser plugin. Useful when the application under test is not instrumented in the source code.",
+    )
+    parser.add_argument(
         "--kwargs",
         type=parse_dict,
         help="Additional keyword arguments for the workflow. Must be a JSON string.",
         default={},
         required=False,
     )
-    args = parser.parse_args()
+    if input_args is not None:
+        args = parser.parse_args(input_args)
+    else:
+        args = parser.parse_args()
 
     # Logging the arguments
     logging.info("Arguments for this run:")
@@ -59,10 +68,11 @@ def parse_args():
     return args
 
 
-async def main(args):
+async def main(args: Namespace):
     logger.info(
         f"\tWorkflow type: {args.workflow_type}"
         f"\tMode: {args.mode}"
+        f"\tUse UserALE browser plugin: {args.use_plugin}"
         f"\tArguments: {args.kwargs}"
     )
     workflow = import_workflow(workflow_type=args.workflow_type)
@@ -71,7 +81,14 @@ async def main(args):
 
     # Run the workflow
     async with async_playwright() as p:
-        await run(p, workflow=workflow, mode=args.mode, logger=logger, **args.kwargs)
+        await run(
+            p,
+            workflow=workflow,
+            mode=args.mode,
+            use_plugin=args.use_plugin,
+            logger=logger,
+            **args.kwargs,
+        )
 
 
 if __name__ == "__main__":

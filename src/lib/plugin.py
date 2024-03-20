@@ -70,6 +70,7 @@ async def create_plugin_context(playwright: Playwright, **kwargs) -> BrowserCont
         kwargs.pop("user_data_dir", cfg.user_data_dir)
         or f"/tmp/flagon-demo-bot-{user_id}"
     )
+    headless: bool = kwargs.pop("headless", True)
 
     # Validate config values
     if any([url is None, user_id is None, password is None]):
@@ -77,7 +78,7 @@ async def create_plugin_context(playwright: Playwright, **kwargs) -> BrowserCont
 
     context = await playwright.chromium.launch_persistent_context(
         user_data_dir,
-        headless=False,
+        headless=headless,
         args=[
             f"--disable-extensions-except={cfg.path_to_extension}",
             f"--load-extension={cfg.path_to_extension}",

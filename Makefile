@@ -1,4 +1,4 @@
-.PHONY: venv install-deps run test list-workflows
+.PHONY: venv install-deps install-browsers run test list-workflows
 
 # Define the name of your virtual environment
 VENV_NAME := .venv

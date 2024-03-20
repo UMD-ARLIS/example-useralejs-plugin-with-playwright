@@ -21,6 +21,7 @@ class TestParseArgs:
         assert args.workflow_type == "github-anomalous"
         assert args.mode == "run"
         assert args.kwargs == {"key": "value"}
+        assert args.use_plugin is False
 
     def test_parse_args_missing_mode(self, monkeypatch):
         # Mocking command line arguments
@@ -145,3 +146,19 @@ class TestParseArgs:
         # Testing multiple keyword arguments
         args = parse_args()
         assert args.kwargs == {"key1": "value1", "key2": "value2"}
+
+    def test_parse_args_use_plugin(self, monkeypatch):
+        monkeypatch.setattr(
+            "sys.argv",
+            [
+                "main.py",
+                "--workflow_type",
+                "github-normal",
+                "--mode",
+                "run",
+                "--use_plugin",
+            ],
+        )
+        # Testing use_plugin argument
+        args = parse_args()
+        assert args.use_plugin is True
