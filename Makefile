@@ -1,5 +1,6 @@
 .PHONY: poetry-config install-deps install-browsers run test list-workflows
 
+# Target to configure poetry to use a local virtual environment
 poetry-config:
 	poetry config virtualenvs.in-project true
 

@@ -1,6 +1,6 @@
-from playwright.async_api import Playwright
+from bot.lib.types import RunMode
 from bot.lib.workflow import Workflow
-from bot.types import RunMode
+from playwright.async_api import Playwright
 
 
 async def run_or_loop(workflow: Workflow, mode: RunMode):

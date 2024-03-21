@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "useralejs-playwright-bot"
+name = "bot"
 version = "0.1.0"
 description = "Playwright bot instrumented with UseraleJS"
 authors = ["Evan Jones <ejones@arlis.umd.edu>"]

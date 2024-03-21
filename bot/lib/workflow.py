@@ -1,5 +1,7 @@
 import asyncio
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
+
 from playwright.async_api import Page
 
 
@@ -8,18 +10,18 @@ class Workflow(ABC):
         self.page = page
 
     @abstractmethod
-    def __str__(self):
+    def __str__(self) -> str:
         pass
 
     @abstractmethod
-    def __repr__(self):
+    def __repr__(self) -> str:
         pass
 
     @abstractmethod
-    async def run(self):
+    async def run(self) -> None:
         pass
 
-    async def loop(self):
+    async def loop(self) -> None:
         """
         Run the workflow in an infinite loop.
         """

@@ -1,9 +1,9 @@
 import logging
-from playwright.async_api import Playwright
-import pytest
 
+import pytest
+from bot.lib.run import run
 from bot.lib.workflow import Workflow
-from bot.run import run
+from playwright.async_api import Playwright
 
 
 class TestRun:
@@ -27,15 +27,15 @@ class TestRun:
         # Patch async functions
         context_mock = mocker.patch(
             (
-                "bot.run.create_plugin_context"
+                "bot.lib.run.create_plugin_context"
                 if use_plugin
-                else "bot.run.create_default_context"
+                else "bot.lib.run.create_default_context"
             ),
             return_value=mocker.AsyncMock(),
         )
 
         run_or_loop_mock = mocker.patch(
-            "bot.run.run_or_loop", return_value=mocker.AsyncMock()
+            "bot.lib.run.run_or_loop", return_value=mocker.AsyncMock()
         )
 
         # Set up expectations for mock objects
@@ -49,7 +49,7 @@ class TestRun:
             mode=expected_mode,
             use_plugin=use_plugin,
             logger=logger_mock,
-            **expected_kwargs
+            **expected_kwargs,
         )
 
         # Assert that other calls we do not want to test were not called

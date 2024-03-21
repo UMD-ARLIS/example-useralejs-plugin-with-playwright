@@ -1,5 +1,5 @@
 import pytest
-from main import parse_args
+from bot.main import parse_args
 
 
 class TestParseArgs:

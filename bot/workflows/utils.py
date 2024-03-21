@@ -1,12 +1,11 @@
-import colorama
-
-from colorama import Fore
 from importlib import import_module
-from typing import Dict, Tuple
+from typing import Dict
+from typing import Tuple
 
-
+import colorama
+from bot.lib.types import WorkflowType
 from bot.lib.workflow import Workflow
-from bot.types import WorkflowType
+from colorama import Fore
 
 colorama.init(autoreset=True)
 

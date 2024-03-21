@@ -1,10 +1,10 @@
 import base64
 import json
-
-from playwright.async_api import Playwright, BrowserContext
 from typing import Optional
 
-from config import cfg
+from bot.config import cfg
+from playwright.async_api import BrowserContext
+from playwright.async_api import Playwright
 
 
 def build_config(

@@ -1,13 +1,13 @@
-from argparse import Namespace
 import asyncio
 import json
 import logging
+from argparse import Namespace
+from typing import Any
+from typing import Dict
 
-from playwright.async_api import async_playwright
-from bot.run import run
-
-
+from bot.lib.run import run
 from bot.workflows.utils import import_workflow
+from playwright.async_api import async_playwright
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -16,7 +16,7 @@ logger.setLevel(logging.INFO)
 def parse_args(input_args=None) -> Namespace:
     import argparse
 
-    def parse_dict(s: str) -> dict:
+    def parse_dict(s: str) -> Dict[str, Any]:
         try:
             return json.loads(s)
         except json.JSONDecodeError as e:

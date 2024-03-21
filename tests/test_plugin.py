@@ -1,5 +1,6 @@
 import base64
 import json
+
 import pytest
 from bot.lib.plugin import build_config
 
