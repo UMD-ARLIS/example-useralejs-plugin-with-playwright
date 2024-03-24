@@ -73,8 +73,10 @@ async def create_plugin_context(playwright: Playwright, **kwargs) -> BrowserCont
     headless: bool = kwargs.pop("headless", True)
 
     # Validate config values
-    if any([url is None, user_id is None, password is None]):
-        raise ValueError("Missing required configuration values")
+    if not url:
+        raise ValueError("Missing url for UserALE endpoint. Please set the URL in the configuration.")
+    if not user_id:
+        raise ValueError("Missing user_id for UserALE. Please set the user_id in the configuration.")
 
     context = await playwright.chromium.launch_persistent_context(
         user_data_dir,

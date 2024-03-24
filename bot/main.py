@@ -68,7 +68,9 @@ def parse_args(input_args=None) -> Namespace:
     return args
 
 
-async def main(args: Namespace):
+async def main(args: Namespace, serialized_args: str = None):
+    if serialized_args:
+        args = Namespace(**json.loads(serialized_args))
     logger.info(
         f"\tWorkflow type: {args.workflow_type}"
         f"\tMode: {args.mode}"
