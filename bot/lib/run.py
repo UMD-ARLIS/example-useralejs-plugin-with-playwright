@@ -27,7 +27,7 @@ async def run(
     page = await context.new_page()
 
     # Instantiate workflow class
-    wf = workflow(page=page)
+    wf = workflow(page=page, **kwargs)
 
     logger.info(f"Starting {mode} for {wf}")
     await run_or_loop(workflow=wf, mode=mode)

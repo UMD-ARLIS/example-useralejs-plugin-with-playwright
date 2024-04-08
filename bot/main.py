@@ -6,7 +6,7 @@ from typing import Any
 from typing import Dict
 
 from bot.lib.run import run
-from bot.workflows.utils import import_workflow
+from bot.workflows.utils import import_workflow, workflow_classes
 from playwright.async_api import async_playwright
 
 logger = logging.getLogger(__name__)
@@ -29,10 +29,7 @@ def parse_args(input_args=None) -> Namespace:
         help="The type of workflow to run",
         # Add more workflow types here as needed,
         # eventually cardinality will be too high for choices
-        choices=[
-            "github-anomalous",
-            "github-normal",
-        ],
+        choices=list(workflow_classes.keys()),
         required=True,
     )
     parser.add_argument(

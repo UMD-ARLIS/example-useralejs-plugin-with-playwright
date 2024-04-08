@@ -1,4 +1,12 @@
-from .github_anomalous import GithubAnomalousWorkflow
-from .github_normal import GithubNormalWorkflow
+from .github import GithubAnomalousWorkflow, GithubNormalWorkflow
+from .superset import (
+    SupersetGraphExperiencedWorkflow,
+    SupersetGraphInexperiencedWorkflow,
+)
 
-__all__ = ["GithubAnomalousWorkflow", "GithubNormalWorkflow"]
+__all__ = [
+    "GithubAnomalousWorkflow",
+    "GithubNormalWorkflow",
+    "SupersetGraphExperiencedWorkflow",
+    "SupersetGraphInexperiencedWorkflow",
+]

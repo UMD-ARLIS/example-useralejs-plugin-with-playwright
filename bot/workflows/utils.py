@@ -18,7 +18,14 @@ workflow_classes: Dict[WorkflowType, Tuple[str, str]] = {
         "GithubNormalWorkflow",
         "Workflow in PyTorch GitHub repo with normal behavior.",
     ),
-    # Add more workflow classes here as needed
+    "superset-graph-experienced": (
+        "SupersetGraphExperiencedWorkflow",
+        "Workflow for creating a funnel diagram in Apache Superset with experienced user.",
+    ),
+    "superset-graph-inexperienced": (
+        "SupersetGraphInexperiencedWorkflow",
+        "Workflow for creating a funnel diagram in Apache Superset with inexperienced user.",
+    ),
 }
 
 
