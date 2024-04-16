@@ -1,4 +1,5 @@
 import base64
+import inspect
 import json
 from typing import Optional
 
@@ -92,7 +93,10 @@ async def create_plugin_context(playwright: Playwright, **kwargs) -> BrowserCont
     else:
         background_page = context.background_pages[0]
 
-    config_string = build_config(url=url, user_id=user_id, password=password, **kwargs)
+    build_config_args = set(inspect.signature(build_config).parameters)
+    build_config_kwargs = {key: kwargs[key] for key in kwargs if key in build_config_args}
+
+    config_string = build_config(url=url, user_id=user_id, password=password, **build_config_kwargs)
     await background_page.evaluate(
         f"""
         browser.storage.local.set({config_string});

@@ -1,11 +1,22 @@
 import asyncio
-from typing import Literal
+import os
+from typing import Literal, List
+from enum import Enum
 from bot.lib.const import TIMEOUT_MS
 from bot.lib.workflow import Workflow
 from playwright.async_api import Page
 from pydantic import BaseModel, EmailStr
 
-ROLES = Literal["Public", "Gamma", "Alpha", "Admin", "sql_lab"]
+
+class RolesEnum(str, Enum):
+    Admin = "1"
+    Public = "2"
+    Alpha = "3"
+    Gamma = "4"
+    SqlLab = "5"
+
+
+ACTIVE = Literal["y", "n"]
 
 
 class SupersetUser(BaseModel):
@@ -13,10 +24,10 @@ class SupersetUser(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
-    active: bool
+    active: ACTIVE
     conf_password: str
     password: str
-    roles: ROLES
+    roles: List[RolesEnum]
 
 
 class SupersetWorkflow(Workflow):
@@ -26,6 +37,10 @@ class SupersetWorkflow(Workflow):
         # Extract user login credentials from kwargs
         # NOTE: This will throw if the user is not provided which is what we want
         self.user = SupersetUser.model_validate(kwargs.pop("user"))
+        self.base_url = kwargs.pop("superset_url", "http://localhost:8088")
+
+    def url(self, url_path):
+        return os.path.join(self.base_url, url_path)
 
     def __str__(self) -> str:
         pass
@@ -37,7 +52,7 @@ class SupersetWorkflow(Workflow):
         pass
 
     async def login(self) -> None:
-        await self.page.goto("http://localhost:8088/login")
+        await self.page.goto(self.url("login/"))
         await self.page.wait_for_timeout(TIMEOUT_MS)
 
         # Fill in username and password
@@ -90,14 +105,14 @@ class SupersetGraphInexperiencedWorkflow(SupersetWorkflow):
         await asyncio.sleep(5)
 
         #
-        # Detour: click on a number of filters before ECharts
+        # Detour: click on a number of filters before KPI
         #
         for item in ["Correlation", "Distribution", "Evolution", "KPI"]:
             await self.page.locator(f'button[name="{item}"]', has_text=item).click()
             await asyncio.sleep(7)
 
-        # select #ECharts as filter
-        await self.page.locator('button[name="ECharts"]', has_text="ECharts").click()
+        # select KPI as filter
+        await self.page.locator('button[name="KPI"]', has_text="KPI").click()
         await asyncio.sleep(5)
 
         # select funnel chart
@@ -183,8 +198,8 @@ class SupersetGraphExperiencedWorkflow(SupersetWorkflow):
         await self.page.locator('div[label="covid_vaccines"]').click()
         await asyncio.sleep(1)
 
-        # select #ECharts as filter
-        await self.page.locator('button[name="ECharts"]', has_text="ECharts").click()
+        # select KPI as filter
+        await self.page.locator('button[name="KPI"]', has_text="KPI").click()
         await asyncio.sleep(1)
 
         # select funnel chart
