@@ -4,6 +4,7 @@ import logging
 from argparse import Namespace
 from typing import Any
 from typing import Dict
+from typing import Optional
 
 from bot.lib.run import run
 from bot.workflows.utils import import_workflow, workflow_classes
@@ -65,7 +66,7 @@ def parse_args(input_args=None) -> Namespace:
     return args
 
 
-async def main(args: Namespace, serialized_args: str = None):
+async def main(args: Namespace, serialized_args: Optional[str] = None):
     if serialized_args:
         args = Namespace(**json.loads(serialized_args))
     logger.info(
